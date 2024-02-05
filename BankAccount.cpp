@@ -8,7 +8,7 @@ BankAccount::BankAccount()
     m_numYears = 0;
     m_openingBalance = 0.0;
     m_depositedAmount = 0.0;
-    m_depositedSum = 0.0; // sum of opening/deposited amounts
+    m_sumBalances = 0.0; // sum of opening/deposited amounts
     m_interestEarned = 0.0;
     m_endingBalance = 0.0;
 }
@@ -28,15 +28,20 @@ void BankAccount::setDepositedAmount(double t_depositedAmount)
     m_depositedAmount = t_depositedAmount;
 }
 
-void BankAccount::setDepositedSum(double t_opening, double t_deposited)
+void BankAccount::setInterestRate(double t_interestRate)
 {
-    m_depositedSum = t_opening + t_deposited;
+    m_interestRate = t_interestRate;
 }
 
-void BankAccount::setInterestEarned(double t_interestRate)
+void BankAccount::setSumOfBalances(double t_opening, double t_deposited)
+{
+    m_sumBalances = t_opening + t_deposited;
+}
+
+void BankAccount::setEarnedInterest(double t_openingBalance, double t_sumOfBalances, double t_interestRate, int t_years)
 {
     // Annual interest
-    m_interestEarned = ((t_interestRate / 100) / 12);
+    m_interestEarned = (t_openingBalance + t_sumOfBalances) * (t_interestRate / 100) * t_years;
 }
 
 void BankAccount::setEndingBalance(double t_totalAmount, double t_interestAmount)
@@ -59,12 +64,17 @@ double BankAccount::getDepositedAmount() const
     return m_depositedAmount;
 }
 
-double BankAccount::getDepositedSum() const
+double BankAccount::getInterestRate() const
 {
-    return m_depositedSum;
+    return m_interestRate;
 }
 
-double BankAccount::getInterestEarned() const
+double BankAccount::getSumOfBalances() const
+{
+    return m_sumBalances;
+}
+
+double BankAccount::getEarnedInterest() const
 {
     return m_interestEarned;
 }
@@ -78,7 +88,7 @@ void BankAccount::readUserInput()
 {
     double input;
     cout << "Welcome to the Airgead Banking App!" << endl;
-    cout << "*************************************!" << endl;
+    cout << "*************************************" << endl;
     cout << "**************DATA INPUT*************" << endl;
     cout << "Initial investment amount: ";
 
@@ -132,7 +142,7 @@ void BankAccount::readUserInput()
         // Needs to be positive real number
         if (input > 0)
         {
-            setInterestEarned(input);
+            setInterestRate(input);
             break;
         }
         else
@@ -169,25 +179,27 @@ void BankAccount::readUserInput()
     cin.clear();
     cin.ignore(numeric_limits<streamsize>::max(), '\n');
 
+    setSumOfBalances(getOpeningBalance(), getDepositedAmount());
     // Press any key to continue prompt (On Windows)
     system("pause");
 }
 
-void BankAccount::calculateBalanceWithoutAdditions()
+void BankAccount::balanceWithoutAdditions()
 {
-    for (int i = 1; i <= getNumberYears(); ++i)
+    for (int year = 1; year <= getNumberYears(); ++year)
     {
-        setEndingBalance(getDepositedSum(), getInterestEarned());
-        cout << i << endl;
+        setEarnedInterest(getOpeningBalance(), getSumOfBalances(), getInterestRate(), getNumberYears());
+        setEndingBalance(getSumOfBalances(), getEarnedInterest());
+        cout << endl << year << "                 " << getEndingBalance() << "                     " << getEarnedInterest() <<  endl;
     }
 }
 
-void BankAccount::calculateBalanceWithAdditions()
+void BankAccount::balanceWithAdditions()
 {
-    for (int i = 1; i <= getNumberYears(); ++i)
+    for (int year = 1; year <= getNumberYears(); ++year)
     {
-        setEndingBalance(getDepositedSum(), getInterestEarned());
-        cout << i << endl;
+        setEndingBalance(getSumOfBalances(), getEarnedInterest());
+        cout << endl << year << "                 " << getEndingBalance() << "                     " << getEarnedInterest() <<  endl;
     }
 }
 
@@ -197,7 +209,7 @@ void BankAccount::printNoDeposits()
     cout << "=================================================================" << endl;
     cout << "Year              Year End Balance           Year Earned Interest" << endl;
     cout << "-----------------------------------------------------------------" << endl;
-    calculateBalanceWithAdditions();
+    balanceWithoutAdditions();
     cout << "-----------------------------------------------------------------" << endl;
 }
 
@@ -207,6 +219,6 @@ void BankAccount::printAdditionalDeposits()
     cout << "=================================================================" << endl;
     cout << "Year              Year End Balance           Year Earned Interest" << endl;
     cout << "-----------------------------------------------------------------" << endl;
-    calculateBalanceWithAdditions();
+    balanceWithAdditions();
     cout << "-----------------------------------------------------------------" << endl;
 }
