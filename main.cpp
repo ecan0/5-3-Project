@@ -1,10 +1,11 @@
-#include <>
+#include <iostream>
+#include "BankAccount.h"
 
 using namespace std;
 
 int main()
 {
-    BankAccount test = new BankAccount();
-    test.getUserInput()
+    BankAccount test;
+    test.getUserInput();
     return 0;
 }

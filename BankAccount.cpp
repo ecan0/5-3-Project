@@ -13,9 +13,34 @@ BankAccount::BankAccount()
     m_endingBalance = 0.0;
 }
 
+void BankAccount::setNumberYears(int t_numYears)
+{
+    m_numYears = t_numYears;
+}
+
 void BankAccount::setOpeningBalance(double t_openingBalance)
 {
     m_openingBalance = t_openingBalance;
+}
+
+void BankAccount::setDepositedAmount(double t_depositedAmount)
+{
+    m_depositedAmount = t_depositedAmount;
+}
+
+void BankAccount::setDepositedSum(double t_opening, double t_deposited)
+{
+    m_depositedSum = t_opening + t_deposited;
+}
+
+void BankAccount::setInterestEarned(double t_interestRate)
+{
+    m_interestEarned = t_interestRate;
+}
+
+void BankAccount::setEndingBalance(double t_totalAmount, double t_interestAmount)
+{
+    m_endingBalance = t_totalAmount + t_interestAmount;
 }
 
 void BankAccount::getUserInput()
@@ -101,7 +126,7 @@ void BankAccount::getUserInput()
         // Needs to be positive real number
         if (input > 0)
         {
-            setNumberYears(input);
+            setNumberYears(static_cast<int>(input));
             break;
         }
         else
