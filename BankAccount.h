@@ -14,7 +14,11 @@ public:
     // constructor
     BankAccount();
 
-    void getUserInput();
+    void readUserInput();
+    void printNoDeposits();
+    void printAdditionalDeposits();
+    void calculateBalanceWithAdditions();
+    void calculateBalanceWithoutAdditions();
 
     // mutators
     void setNumberYears(int t_numYears);
@@ -25,7 +29,7 @@ public:
     void setEndingBalance(double t_totalAmount, double t_interestAmount);
 
     // accessors
-    int getNumberYears(int t_numYears);
+    int getNumberYears();
     double getOpeningBalance() const;
     double getDepositedAmount() const;
     double getDepositedSum() const;

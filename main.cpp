@@ -6,6 +6,7 @@ using namespace std;
 int main()
 {
     BankAccount test;
-    test.getUserInput();
-    return 0;
+    test.readUserInput();
+    test.printNoDeposits();
+    test.printAdditionalDeposits();
 }

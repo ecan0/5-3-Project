@@ -35,7 +35,8 @@ void BankAccount::setDepositedSum(double t_opening, double t_deposited)
 
 void BankAccount::setInterestEarned(double t_interestRate)
 {
-    m_interestEarned = t_interestRate;
+    // Annual interest
+    m_interestEarned = ((t_interestRate / 100) / 12);
 }
 
 void BankAccount::setEndingBalance(double t_totalAmount, double t_interestAmount)
@@ -43,7 +44,37 @@ void BankAccount::setEndingBalance(double t_totalAmount, double t_interestAmount
     m_endingBalance = t_totalAmount + t_interestAmount;
 }
 
-void BankAccount::getUserInput()
+int BankAccount::getNumberYears()
+{
+    return m_numYears;
+}
+
+double BankAccount::getOpeningBalance() const
+{
+    return m_openingBalance;
+}
+
+double BankAccount::getDepositedAmount() const
+{
+    return m_depositedAmount;
+}
+
+double BankAccount::getDepositedSum() const
+{
+    return m_depositedSum;
+}
+
+double BankAccount::getInterestEarned() const
+{
+    return m_interestEarned;
+}
+
+double BankAccount::getEndingBalance() const
+{
+    return m_endingBalance;
+}
+
+void BankAccount::readUserInput()
 {
     double input;
     cout << "Welcome to the Airgead Banking App!" << endl;
@@ -72,8 +103,7 @@ void BankAccount::getUserInput()
     cin.clear();
     cin.ignore(numeric_limits<streamsize>::max(), '\n');
 
-    cout << endl
-         << "Monthly deposit amount: ";
+    cout << "Monthly deposit amount: ";
     // Monthly deposit amount user input check
     while (cin >> input)
     {
@@ -96,8 +126,7 @@ void BankAccount::getUserInput()
     cin.ignore(numeric_limits<streamsize>::max(), '\n');
 
     // Annual accured interest  user input check
-    cout << endl
-         << "Annual Interest: ";
+    cout << "Annual Interest: ";
     while (cin >> input)
     {
         // Needs to be positive real number
@@ -118,9 +147,8 @@ void BankAccount::getUserInput()
     cin.clear();
     cin.ignore(numeric_limits<streamsize>::max(), '\n');
 
-    //Number of years user input
-    cout << endl
-         << "Number of years: ";
+    // Number of years user input
+    cout << "Number of years: ";
     while (cin >> input)
     {
         // Needs to be positive real number
@@ -140,4 +168,45 @@ void BankAccount::getUserInput()
     // Clear input buffer for next input.
     cin.clear();
     cin.ignore(numeric_limits<streamsize>::max(), '\n');
+
+    // Press any key to continue prompt (On Windows)
+    system("pause");
+}
+
+void BankAccount::calculateBalanceWithoutAdditions()
+{
+    for (int i = 1; i <= getNumberYears(); ++i)
+    {
+        setEndingBalance(getDepositedSum(), getInterestEarned());
+        cout << i << endl;
+    }
+}
+
+void BankAccount::calculateBalanceWithAdditions()
+{
+    for (int i = 1; i <= getNumberYears(); ++i)
+    {
+        setEndingBalance(getDepositedSum(), getInterestEarned());
+        cout << i << endl;
+    }
+}
+
+void BankAccount::printNoDeposits()
+{
+    cout << "     Balance And Interest Without Additional Monthly Deposits    " << endl;
+    cout << "=================================================================" << endl;
+    cout << "Year              Year End Balance           Year Earned Interest" << endl;
+    cout << "-----------------------------------------------------------------" << endl;
+    calculateBalanceWithAdditions();
+    cout << "-----------------------------------------------------------------" << endl;
+}
+
+void BankAccount::printAdditionalDeposits()
+{
+    cout << "     Balance And Interest With Additional Monthly Deposits    " << endl;
+    cout << "=================================================================" << endl;
+    cout << "Year              Year End Balance           Year Earned Interest" << endl;
+    cout << "-----------------------------------------------------------------" << endl;
+    calculateBalanceWithAdditions();
+    cout << "-----------------------------------------------------------------" << endl;
 }
