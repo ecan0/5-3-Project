@@ -1,40 +1,45 @@
 #ifndef BANK_ACCOUNT_H
 #define BANK_ACCOUNT_H
 
+#include <iostream>
+#include <iomanip>
 #include <string>
+#include <limits> // Include for numeric_limits.
 
 using namespace std;
 
-class BankAccount {
+class BankAccount
+{
 public:
-    //constructor
+    // constructor
     BankAccount();
 
+    void getUserInput();
+
     // mutators
-    void SetMonths(const int& t_months);
-    double SetOpeningBalance(double t_openingBalance) const;
-    double SetDepositedAmount(double t_depositedAmount) const;
-    double SetDepositedSum(double t_opening, double t_deposited) const;
-    double SetInterestEarned(double t_interestRate) const;
-    double SetEndingBalance(double t_totalAmount, double t_interestAmount) const;
+    void setNumberYears(int t_numYears);
+    void setOpeningBalance(double t_openingBalance);
+    void setDepositedAmount(double t_depositedAmount);
+    void setDepositedSum(double t_opening, double t_deposited);
+    void setInterestEarned(double t_interestRate);
+    void setEndingBalance(double t_totalAmount, double t_interestAmount);
 
     // accessors
-    int GetMonths() const;
-    double GetOpeningBalance() const;
-    double GetDepositedAmount() const;
-    double GetDepositedSum() const;
-    double GetInterestEarned() const;
-    double GetEndingBalance() const;
+    int getNumberYears(int t_numYears);
+    double getOpeningBalance() const;
+    double getDepositedAmount() const;
+    double getDepositedSum() const;
+    double getInterestEarned() const;
+    double getEndingBalance() const;
 
 private:
-    //fields
-    int numMonths = 0; //NOTE: is a result of years, so will be a mult. of 12!
-    double openingBalance=0.0;
-    double depositedAmount=0.0;
-    double depositedSum=0.0; //sum of opening/deposited amounts
-    double interestEarned=0.0;
-    double endingBalance=0.0;
+    // fields
+    int m_numYears = 0;
+    double m_openingBalance = 0.0;
+    double m_depositedAmount = 0.0;
+    double m_depositedSum = 0.0; // sum of opening/deposited amounts
+    double m_interestEarned = 0.0;
+    double m_endingBalance = 0.0;
 };
-
 
 #endif
