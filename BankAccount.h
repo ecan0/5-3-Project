@@ -26,7 +26,7 @@ public:
     void setDepositedAmount(double t_depositedAmount);
     void setInterestRate(double t_interestRate);
     void setSumOfBalances(double t_opening, double t_deposited);
-    void setEarnedInterest(double t_openingBalance, double t_sumOfBalances, double t_interestRate, int t_years);
+    void setEarnedInterest(double t_openingBalance, double t_interestRate);
     void setEndingBalance(double t_totalAmount, double t_interestAmount);
 
     // accessors

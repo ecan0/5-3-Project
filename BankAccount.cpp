@@ -1,6 +1,7 @@
 #include <iostream>
-#include "BankAccount.h"
+#include <math.h>
 
+#include "BankAccount.h"
 using namespace std;
 
 BankAccount::BankAccount()
@@ -30,7 +31,7 @@ void BankAccount::setDepositedAmount(double t_depositedAmount)
 
 void BankAccount::setInterestRate(double t_interestRate)
 {
-    m_interestRate = t_interestRate;
+    m_interestRate = t_interestRate / 100 / 12;
 }
 
 void BankAccount::setSumOfBalances(double t_opening, double t_deposited)
@@ -38,10 +39,10 @@ void BankAccount::setSumOfBalances(double t_opening, double t_deposited)
     m_sumBalances = t_opening + t_deposited;
 }
 
-void BankAccount::setEarnedInterest(double t_openingBalance, double t_sumOfBalances, double t_interestRate, int t_years)
+void BankAccount::setEarnedInterest(double t_openingBalance, double t_interestRate)
 {
     // Annual interest
-    m_interestEarned = (t_openingBalance + t_sumOfBalances) * (t_interestRate / 100) * t_years;
+    m_interestEarned = t_openingBalance * t_interestRate;
 }
 
 void BankAccount::setEndingBalance(double t_totalAmount, double t_interestAmount)
@@ -87,9 +88,11 @@ double BankAccount::getEndingBalance() const
 void BankAccount::readUserInput()
 {
     double input;
-    cout << "Welcome to the Airgead Banking App!" << endl;
+    cout << "Welcome to the Airgead Banking App!\n"
+         << endl;
     cout << "*************************************" << endl;
-    cout << "**************DATA INPUT*************" << endl;
+    cout << "**************DATA INPUT*************\n"
+         << endl;
     cout << "Initial investment amount: ";
 
     // Opening Investment user input check
@@ -182,24 +185,82 @@ void BankAccount::readUserInput()
     setSumOfBalances(getOpeningBalance(), getDepositedAmount());
     // Press any key to continue prompt (On Windows)
     system("pause");
+    cout << "\n"
+         << endl;
+    ;
 }
 
 void BankAccount::balanceWithoutAdditions()
 {
-    for (int year = 1; year <= getNumberYears(); ++year)
+    // Constants
+    const int monthsPerYear = 12;
+
+    // Initializations
+    double openingBalance = getOpeningBalance();
+    double interestRate = getInterestRate();
+    int numYears = getNumberYears();
+
+    // Calculate and print year-end balance and interest earned for each year
+    for (int year = 1; year <= numYears; ++year)
     {
-        setEarnedInterest(getOpeningBalance(), getSumOfBalances(), getInterestRate(), getNumberYears());
-        setEndingBalance(getSumOfBalances(), getEarnedInterest());
-        cout << endl << year << "                 " << getEndingBalance() << "                     " << getEarnedInterest() <<  endl;
+        // Calculate monthly interest rate
+        double monthlyInterestRate = pow(1 + interestRate, monthsPerYear) - 1;
+
+        // Calculate interest earned for the year
+        double interestEarned = openingBalance * monthlyInterestRate;
+
+        // Calculate year-end balance
+        double endingBalance = openingBalance + interestEarned;
+
+        // Print the results for the current year
+        cout << fixed << setprecision(2) << year << "                 " << endingBalance << "                      " << interestEarned << endl;
+
+        // Update opening balance for the next iteration
+        openingBalance = endingBalance;
     }
 }
 
 void BankAccount::balanceWithAdditions()
 {
-    for (int year = 1; year <= getNumberYears(); ++year)
+    // Constants
+    const int monthsPerYear = 12;
+
+    // Initializations
+    double openingBalance = getOpeningBalance();
+    double monthlyDeposit = getDepositedAmount();
+    double interestRate = getInterestRate();
+    int numYears = getNumberYears();
+
+    // Reset sumBalances for the new calculation
+    setSumOfBalances(0.0, 0.0);
+
+    // Calculate and update the end of year balance for each year
+    for (int year = 1; year <= numYears; ++year)
     {
-        setEndingBalance(getSumOfBalances(), getEarnedInterest());
-        cout << endl << year << "                 " << getEndingBalance() << "                     " << getEarnedInterest() <<  endl;
+        // Calculate monthly interest rate
+        double monthlyInterestRate = pow(1 + interestRate, monthsPerYear) - 1;
+
+        // Calculate interest earned for the year
+        double interestEarned = openingBalance * monthlyInterestRate;
+
+        // Calculate year-end balance
+        double endingBalance = openingBalance + interestEarned;
+
+        // Add monthly deposits (excluding the first month)
+        for (int month = 2; month <= monthsPerYear; ++month)
+        {
+            endingBalance += monthlyDeposit;
+            endingBalance += endingBalance * monthlyInterestRate; // Compounded interest for the month
+        }
+
+        // Update sumBalances for the current year
+        setSumOfBalances(getSumOfBalances() + endingBalance, 0.0);
+
+        // Print the results for the current year
+        cout << fixed << setprecision(2) << year << "                 " << endingBalance << "                      " << interestEarned << endl;
+
+        // Update opening balance for the next iteration
+        openingBalance = endingBalance;
     }
 }
 
