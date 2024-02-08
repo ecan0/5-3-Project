@@ -1,3 +1,4 @@
+//header guards
 #ifndef BANK_ACCOUNT_H
 #define BANK_ACCOUNT_H
 
@@ -14,11 +15,12 @@ public:
     // constructor
     BankAccount();
 
+    //Functions for user input, calculating balances, and printing.
     void readUserInput();
+    void balanceWithoutAdditions();
+    void balanceWithAdditions();
     void printNoDeposits();
     void printAdditionalDeposits();
-    void balanceWithAdditions();
-    void balanceWithoutAdditions();
 
     // mutators
     void setNumberYears(int t_numYears);
@@ -44,9 +46,9 @@ private:
     double m_openingBalance = 0.0;
     double m_depositedAmount = 0.0;
     double m_interestRate = 0.0;
-    double m_sumBalances = 0.0; // sum of opening/deposited amounts
+    double m_sumBalances = 0.0; // sum of opening+deposited amounts
     double m_interestEarned = 0.0;
-    double m_endingBalance = 0.0;
+    double m_endingBalance = 0.0; //year end balance
 };
 
 #endif
