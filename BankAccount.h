@@ -16,6 +16,7 @@ public:
     BankAccount();
 
     //Functions for user input, calculating balances, and printing.
+    double readPositiveRealNumber(const string& t_prompt);
     void readUserInput();
     void balanceWithoutAdditions();
     void balanceWithAdditions();

@@ -5,8 +5,8 @@ using namespace std;
 
 int main()
 {
-    BankAccount test;
-    test.readUserInput();
-    test.printNoDeposits();
-    test.printAdditionalDeposits();
+    BankAccount Account;
+    Account.readUserInput();
+    Account.printNoDeposits();
+    Account.printAdditionalDeposits();
 }
